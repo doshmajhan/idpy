@@ -10,3 +10,7 @@ lint:
 format:
 	poetry run black .
 	poetry run isort .
+
+install-hooks:
+	poetry run pre-commit install -t pre-commit
+	poetry run pre-commit install -t pre-push

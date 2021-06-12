@@ -6,6 +6,9 @@ __pycache__/
 .idea/
 # C extensions
 *.so
+**/test_request.json
+**/pki/*.pem
+**/pki/*.csr
 
 # Distribution / packaging
 .Python
