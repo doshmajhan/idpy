@@ -2,9 +2,10 @@
 Mock SAML IDP in Python for testing
 
 ## Setup
-### Install `poetry`
+### Install dependencies
 ```bash
 pip install poetry
+poetry install
 ```
 ### Install xmlsec1
 ```bash
@@ -23,12 +24,15 @@ cd app/pki
 make run
 ```
 
-
-
 ## Development setup
 Same as above setup plus a few more steps
 
 ### Install git hooks
 ```bash
 make install-hooks
+```
+
+### Run tests
+```bash
+make pytest
 ```
