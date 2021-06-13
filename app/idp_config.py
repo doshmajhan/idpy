@@ -1,4 +1,5 @@
 import os.path
+from pathlib import Path
 
 from saml2 import (
     BINDING_HTTP_ARTIFACT,
@@ -23,10 +24,12 @@ if get_xmlsec_binary:
 else:
     xmlsec_path = "/usr/bin/xmlsec1"
 
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
+BASEDIR = Path(__file__).parent
 
 
 def full_path(local_file):
+    print(BASEDIR)
+    print(local_file)
     return os.path.join(BASEDIR, local_file)
 
 

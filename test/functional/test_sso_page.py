@@ -4,6 +4,7 @@ Tests our sso functionality
 from urllib.parse import quote
 
 import pytest
+from flask import Flask
 from saml2 import BINDING_HTTP_REDIRECT
 from saml2.request import AuthnRequest
 from saml2.s_utils import deflate_and_base64_encode
@@ -37,7 +38,7 @@ def authn_request_unsigned(saml_client) -> AuthnRequest:
     return authn_req
 
 
-def test_sso_with_valid_parameters(client, authn_request):
+def test_sso_with_valid_parameters(client: Flask, authn_request: str):
     print(authn_request)
     response = client.get(
         f"{SSO_ENDPOINT}?SAMLRequest={quote(authn_request)}&RelayState={quote(RELAY_STATE)}"
@@ -45,7 +46,7 @@ def test_sso_with_valid_parameters(client, authn_request):
     assert response.status_code == 200
 
 
-def test_sso_returns_bad_request_with_no_saml_request(client):
+def test_sso_returns_bad_request_with_no_saml_request(client: Flask):
     response = client.get(f"{SSO_ENDPOINT}?RelayState={RELAY_STATE}")
     assert response.status_code == 400
     assert "message" in response.json
@@ -54,7 +55,7 @@ def test_sso_returns_bad_request_with_no_saml_request(client):
     }
 
 
-def test_sso_returns_bad_request_with_no_relay_state(client, authn_request):
+def test_sso_returns_bad_request_with_no_relay_state(client: Flask, authn_request: str):
     response = client.get(f"{SSO_ENDPOINT}?SAMLRequest={authn_request}")
     assert response.status_code == 400
     assert "message" in response.json
