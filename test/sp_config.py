@@ -1,3 +1,5 @@
+import os
+
 from saml2 import BINDING_HTTP_POST, BINDING_HTTP_REDIRECT
 from saml2.saml import NAME_FORMAT_URI
 
@@ -12,7 +14,13 @@ if get_xmlsec_binary:
 else:
     xmlsec_path = "/usr/local/bin/xmlsec1"
 
-# Make sure the same port number appear in service_conf.py
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+
+def full_path(local_file):
+    return os.path.join(BASEDIR, local_file)
+
+
 BASE = "http://localhost:8080"
 
 CONFIG = {
@@ -34,8 +42,8 @@ CONFIG = {
             },
         },
     },
-    "key_file": "test/pki/key.pem",
-    "cert_file": "test/pki/cert.pem",
+    "key_file": full_path("pki/key.pem"),
+    "cert_file": full_path("pki/cert.pem"),
     "xmlsec_binary": xmlsec_path,
     "name_form": NAME_FORMAT_URI,
 }
