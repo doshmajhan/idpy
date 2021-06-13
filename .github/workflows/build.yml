@@ -8,7 +8,7 @@ jobs:
       matrix:
         python-version: [3.8, 3.9]
         poetry-version: [1.1.6]
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -19,6 +19,14 @@ jobs:
         uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
+
+      - name: Install xmlsec1 (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt -y install xmlsec1
+
+      - name: Install xmlsec1 (macOS)
+        if: matrix.os == 'macos-latest'
+        run: port install xmlsec1
 
       - name: Install dependencies
         run: poetry install
