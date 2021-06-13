@@ -33,6 +33,16 @@ jobs:
           brew install libxml2 libxmlsec1 pkg-config
           pip install xmlsec
 
+      - name: Create IDP certs
+        run: |
+          cd app/pki
+          ./create_cert.sh
+
+      - name: Create test SP certs
+        run: |
+          cd test/pki
+          ./create_cert.sh
+
       - name: Install dependencies
         run: poetry install
 
