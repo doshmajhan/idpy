@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "IdPy"
+name = "idpy"
 version = "0.1.0"
 description = "Mock SAML IDP in Python"
 authors = ["Cameron Clark <cameron@gremlin.com>"]

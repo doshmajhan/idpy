@@ -1,31 +1,52 @@
 """
 Tests our sso functionality
 """
+from urllib.parse import quote
 
+import pytest
+from saml2 import BINDING_HTTP_REDIRECT
+from saml2.request import AuthnRequest
+from saml2.s_utils import deflate_and_base64_encode
+
+BASE = "http://localhost:8080"
 SSO_ENDPOINT = "/sso"
+RELAY_STATE = f"{BASE}/relay"  # TODO maybe put in config?
+DESTINATION = f"{BASE}{SSO_ENDPOINT}"  # TODO get this from config
 
 
-def test_sso_with_valid_parameters(client):
-    saml_request = "request"
-    relay_state = "relay"
-    sig_alg = "SHA1"
-    signature = "dosh"
+# TODO compress and base64 encoded
+@pytest.fixture
+def authn_request(saml_client) -> str:
+    req_id, authn_req = saml_client.create_authn_request(
+        destination=DESTINATION,
+        binding=BINDING_HTTP_REDIRECT,
+    )  # type: str, str
 
+    return deflate_and_base64_encode(authn_req)
+
+
+# TODO compress and base64 encoded
+@pytest.fixture
+def authn_request_unsigned(saml_client) -> AuthnRequest:
+    req_id, authn_req = saml_client.create_authn_request(
+        destination=DESTINATION,
+        binding=BINDING_HTTP_REDIRECT,
+        sign=False,
+    )  # type: str, AuthnRequest
+
+    return authn_req
+
+
+def test_sso_with_valid_parameters(client, authn_request):
+    print(authn_request)
     response = client.get(
-        f"{SSO_ENDPOINT}?SAMLRequest={saml_request}&RelayState={relay_state}&SigAlg={sig_alg}&Signature={signature}"
+        f"{SSO_ENDPOINT}?SAMLRequest={quote(authn_request)}&RelayState={quote(RELAY_STATE)}"
     )
     assert response.status_code == 200
-    assert b"request" in response.data
 
 
 def test_sso_returns_bad_request_with_no_saml_request(client):
-    relay_state = "relay"
-    sig_alg = "SHA1"
-    signature = "dosh"
-
-    response = client.get(
-        f"{SSO_ENDPOINT}?RelayState={relay_state}&SigAlg={sig_alg}&Signature={signature}"
-    )
+    response = client.get(f"{SSO_ENDPOINT}?RelayState={RELAY_STATE}")
     assert response.status_code == 400
     assert "message" in response.json
     assert response.json["message"] == {
@@ -33,46 +54,10 @@ def test_sso_returns_bad_request_with_no_saml_request(client):
     }
 
 
-def test_sso_returns_bad_request_with_no_relay_state(client):
-    saml_request = "request"
-    sig_alg = "SHA1"
-    signature = "dosh"
-
-    response = client.get(
-        f"{SSO_ENDPOINT}?SAMLRequest={saml_request}&SigAlg={sig_alg}&Signature={signature}"
-    )
+def test_sso_returns_bad_request_with_no_relay_state(client, authn_request):
+    response = client.get(f"{SSO_ENDPOINT}?SAMLRequest={authn_request}")
     assert response.status_code == 400
     assert "message" in response.json
     assert response.json["message"] == {
         "RelayState": "Missing required parameter in the JSON body or the post body or the query string"
-    }
-
-
-def test_sso_returns_bad_request_with_no_sig_alg(client):
-    saml_request = "request"
-    relay_state = "relay"
-    signature = "dosh"
-
-    response = client.get(
-        f"{SSO_ENDPOINT}?SAMLRequest={saml_request}&RelayState={relay_state}&Signature={signature}"
-    )
-    assert response.status_code == 400
-    assert "message" in response.json
-    assert response.json["message"] == {
-        "SigAlg": "Missing required parameter in the JSON body or the post body or the query string"
-    }
-
-
-def test_sso_returns_bad_request_with_no_signature(client):
-    saml_request = "request"
-    relay_state = "relay"
-    sig_alg = "SHA1"
-
-    response = client.get(
-        f"{SSO_ENDPOINT}?SAMLRequest={saml_request}&RelayState={relay_state}&SigAlg={sig_alg}"
-    )
-    assert response.status_code == 400
-    assert "message" in response.json
-    assert response.json["message"] == {
-        "Signature": "Missing required parameter in the JSON body or the post body or the query string"
     }

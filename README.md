@@ -1,5 +1,5 @@
-# IdPy
-Mock SAML IDP in Python for testing
+# idpy
+Mock SAML Identity Provider in Python for testing SAML Service Provider implementations
 
 ## Setup
 ### Install dependencies
@@ -30,6 +30,12 @@ Same as above setup plus a few more steps
 ### Install git hooks
 ```bash
 make install-hooks
+```
+
+### Create test certs
+```bash
+cd test/pki
+./create_cert.sh
 ```
 
 ### Run tests

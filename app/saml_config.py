@@ -63,7 +63,7 @@ CONFIG = {
             "endpoints": {"authn_query_service": [("%s/aqs" % BASE, BINDING_SOAP)]},
         },
         "idp": {
-            "name": "IdPy",
+            "name": "idpy",
             "endpoints": {
                 "single_sign_on_service": [
                     ("%s/sso/redirect" % BASE, BINDING_HTTP_REDIRECT),
@@ -102,8 +102,8 @@ CONFIG = {
     "key_file": full_path("pki/key.pem"),
     "cert_file": full_path("pki/cert.pem"),
     "organization": {
-        "display_name": "IdPy",
-        "name": "IdPy",
+        "display_name": "idpy",
+        "name": "idpy",
         "url": "http://localhost",
     },
     "xmlsec_binary": xmlsec_path,
