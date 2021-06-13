@@ -1,4 +1,6 @@
 # idpy
+[![build](https://github.com/doshmajhan/idpy/actions/workflows/build.yml/badge.svg)](https://github.com/doshmajhan/idpy/actions/workflows/build.yml)
+
 Mock SAML Identity Provider in Python for testing SAML Service Provider implementations
 
 ## Setup
