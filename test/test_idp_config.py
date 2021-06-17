@@ -84,7 +84,6 @@ CONFIG = {
         {
             "class": "saml2.mdstore.MetaDataFile",
             "metadata": [
-                (full_path("metadata/test-idp.xml"),),
                 (full_path("metadata/test-sp.xml"),),
             ],
         }

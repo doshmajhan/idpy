@@ -25,6 +25,16 @@ SP_CONFIG_FILE = os.path.join(Path(__file__).parent, SP_CONFIG_FILE_NAME)
 
 
 if __name__ == "__main__":
+    sp_config = Config().load_file(SP_CONFIG_FILE)
+    sp_config.valid_for = METADATA_VALID_FOR
+    sp_sec_context = security_context(sp_config)
+    sp_eid = entity_descriptor(sp_config)
+    sp_eid, sp_xml_doc = sign_entity_descriptor(sp_eid, None, sp_sec_context)
+
+    valid_instance(sp_eid)
+    sp_xml_doc = metadata_tostring_fix(sp_eid, NAME_SPACE_PAIR, sp_xml_doc)
+    with open(SP_METADATA_FILE, "w+") as metadata_file:
+        metadata_file.write(sp_xml_doc)
 
     idp_config = Config().load_file(IDP_CONFIG_FILE)
     idp_config.valid_for = METADATA_VALID_FOR
@@ -36,14 +46,3 @@ if __name__ == "__main__":
     idp_xml_doc = metadata_tostring_fix(idp_eid, NAME_SPACE_PAIR, idp_xml_doc)
     with open(IDP_METADATA_FILE, "w+") as metadata_file:
         metadata_file.write(idp_xml_doc)
-
-    sp_config = Config().load_file(SP_CONFIG_FILE)
-    sp_config.valid_for = METADATA_VALID_FOR
-    sp_sec_context = security_context(sp_config)
-    sp_eid = entity_descriptor(sp_config)
-    sp_eid, sp_xml_doc = sign_entity_descriptor(sp_eid, None, sp_sec_context)
-
-    valid_instance(sp_eid)
-    sp_xml_doc = metadata_tostring_fix(sp_eid, NAME_SPACE_PAIR, sp_xml_doc)
-    with open(SP_METADATA_FILE, "w+") as metadata_file:
-        metadata_file.write(sp_xml_doc)
