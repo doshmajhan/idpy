@@ -4,7 +4,7 @@ from saml2.client import Saml2Client
 
 from app import create_app
 
-SP_CONFIG_FILE = "./test/sp_config.py"
+SP_CONFIG_FILE = "./test/test_sp_config.py"
 
 
 @pytest.fixture

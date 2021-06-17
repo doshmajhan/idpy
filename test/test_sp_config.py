@@ -19,8 +19,6 @@ BASEDIR = Path(__file__).parent
 
 
 def full_path(local_file):
-    print(BASEDIR)
-    print(local_file)
     return os.path.join(BASEDIR, local_file)
 
 

@@ -20,7 +20,7 @@ yum install xmlsec1
 ### Create certs
 ```bash
 cd app/pki
-./create_cert.sh
+./create-cert.sh
 ```
 
 ## Run
@@ -39,7 +39,7 @@ make install-hooks
 ### Create test certs
 ```bash
 cd test/pki
-./create_cert.sh
+./create-cert.sh
 ```
 
 ### Run tests

@@ -3,13 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
 .idea/
 # C extensions
 *.so
 **/test_request.json
 **/pki/*.pem
 **/pki/*.csr
+*.xml
 
+tools/
 # Distribution / packaging
 .Python
 build/

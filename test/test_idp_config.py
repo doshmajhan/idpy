@@ -41,13 +41,11 @@ SERVER_KEY = "pki/key.pem"
 CERT_CHAIN = ""
 SIGN_ALG = None
 DIGEST_ALG = None
-# SIGN_ALG = ds.SIG_RSA_SHA512
-# DIGEST_ALG = ds.DIGEST_SHA512
 
 
 CONFIG = {
-    "entityid": "%s/idp.xml" % BASE,
-    "description": "Mock IDP",
+    "entityid": "%s/test-idp" % BASE,
+    "description": "Testing IDP",
     "valid_for": 168,
     "service": {
         "idp": {
@@ -85,7 +83,10 @@ CONFIG = {
     "metadata": [
         {
             "class": "saml2.mdstore.MetaDataFile",
-            "metadata": [(full_path("metadata/idp.xml"),)],
+            "metadata": [
+                (full_path("metadata/test-idp.xml"),),
+                (full_path("metadata/test-sp.xml"),),
+            ],
         }
     ],
     "logging": {
