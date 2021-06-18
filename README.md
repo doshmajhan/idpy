@@ -23,6 +23,12 @@ cd app/pki
 ./create-cert.sh
 ```
 
+### Generate metadata
+```bash
+cd app/metadata
+poetry run python generate_metadata.py
+```
+
 ## Run
 ```bash
 make run
@@ -40,6 +46,12 @@ make install-hooks
 ```bash
 cd test/pki
 ./create-cert.sh
+```
+
+### Generate test metadata
+```bash
+cd test/metadata
+poetry run python generate_metadata.py
 ```
 
 ### Run tests

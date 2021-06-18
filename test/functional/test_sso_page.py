@@ -4,8 +4,9 @@ Tests our sso functionality
 from urllib.parse import quote
 
 import pytest
+from bs4 import BeautifulSoup
 from flask import Flask
-from saml2 import BINDING_HTTP_REDIRECT
+from saml2 import BINDING_HTTP_POST
 from saml2.request import AuthnRequest
 from saml2.s_utils import deflate_and_base64_encode
 
@@ -20,7 +21,7 @@ DESTINATION = f"{BASE}{SSO_ENDPOINT}"  # TODO get this from config
 def authn_request(saml_client) -> str:
     req_id, authn_req = saml_client.create_authn_request(
         destination=DESTINATION,
-        binding=BINDING_HTTP_REDIRECT,
+        binding=BINDING_HTTP_POST,
     )  # type: str, str
 
     return deflate_and_base64_encode(authn_req)
@@ -31,7 +32,7 @@ def authn_request(saml_client) -> str:
 def authn_request_unsigned(saml_client) -> AuthnRequest:
     req_id, authn_req = saml_client.create_authn_request(
         destination=DESTINATION,
-        binding=BINDING_HTTP_REDIRECT,
+        binding=BINDING_HTTP_POST,
         sign=False,
     )  # type: str, AuthnRequest
 
@@ -39,10 +40,13 @@ def authn_request_unsigned(saml_client) -> AuthnRequest:
 
 
 def test_sso_with_valid_parameters(client: Flask, authn_request: str):
-    print(authn_request)
     response = client.get(
         f"{SSO_ENDPOINT}?SAMLRequest={quote(authn_request)}&RelayState={quote(RELAY_STATE)}"
     )
+    html = BeautifulSoup(response.data, "html.parser")
+    saml_response: str = html.find("input")["value"]
+    assert saml_response is not None
+    print(saml_response)
     assert response.status_code == 200
 
 

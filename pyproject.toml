@@ -19,6 +19,7 @@ pytest-flask = "^1.2.0"
 mypy = "^0.902"
 pytest-cov = "^2.12.1"
 pre-commit = "^2.13.0"
+beautifulsoup4 = "^4.9.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

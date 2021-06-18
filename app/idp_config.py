@@ -41,8 +41,6 @@ SERVER_KEY = "pki/key.pem"
 CERT_CHAIN = ""
 SIGN_ALG = None
 DIGEST_ALG = None
-# SIGN_ALG = ds.SIG_RSA_SHA512
-# DIGEST_ALG = ds.DIGEST_SHA512
 
 
 CONFIG = {
@@ -82,12 +80,7 @@ CONFIG = {
         "url": "http://localhost",
     },
     "xmlsec_binary": xmlsec_path,
-    "metadata": [
-        {
-            "class": "saml2.mdstore.MetaDataFile",
-            "metadata": [(full_path("metadata/idp.xml"),)],
-        }
-    ],
+    "metadata": {"local": [full_path("metadata/idp.xml")]},
     "logging": {
         "version": 1,
         "formatters": {

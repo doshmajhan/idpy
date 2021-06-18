@@ -80,14 +80,7 @@ CONFIG = {
         "url": "http://localhost",
     },
     "xmlsec_binary": xmlsec_path,
-    "metadata": [
-        {
-            "class": "saml2.mdstore.MetaDataFile",
-            "metadata": [
-                (full_path("metadata/test-sp.xml"),),
-            ],
-        }
-    ],
+    "metadata": {"local": [full_path("metadata/test-sp.xml")]},
     "logging": {
         "version": 1,
         "formatters": {

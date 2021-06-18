@@ -25,11 +25,12 @@ def full_path(local_file):
 BASE = "http://localhost:8080"
 
 CONFIG = {
-    "entityid": BASE,
+    "entityid": BASE + "/sp",
     "description": "Mock SP",
     "service": {
         "sp": {
             "want_response_signed": True,
+            "want_assertion_signed": True,
             "authn_requests_signed": True,
             "logout_requests_signed": True,
             "endpoints": {
