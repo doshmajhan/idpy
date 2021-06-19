@@ -2,10 +2,16 @@ from typing import List, Tuple
 
 from flask_restful import Resource, reqparse
 from flask_restful.reqparse import Namespace, RequestParser
-from saml2 import BINDING_HTTP_REDIRECT
+from saml2 import BINDING_HTTP_REDIRECT, NAMEID_FORMAT_EMAILADDRESS
+from saml2.authn_context import PASSWORD, AuthnBroker, authn_context_class_ref
+from saml2.entity import NameID
 from saml2.request import AuthnRequest
 from saml2.samlp import Response
 from saml2.server import Server
+
+
+def username_password_authn():
+    pass
 
 
 class SSO(Resource):
@@ -24,10 +30,29 @@ class SSO(Resource):
         )
 
         response_args: dict = self.idp.response_args(authn_request.message)
-        user = "doshmajhan"
+        user = "doshmajhan@gmail.com"
 
+        # Document a wrapper for this
+        AUTHN_BROKER = AuthnBroker()
+        AUTHN_BROKER.add(
+            authn_context_class_ref(PASSWORD),
+            username_password_authn,
+            10,
+            "http://localhost:8080",
+        )
+
+        authn: dict = AUTHN_BROKER.get_authn_by_accr(PASSWORD)
+
+        name_id = NameID(format=NAMEID_FORMAT_EMAILADDRESS, text=user)
+
+        # Dict should be attributes
         resp: Response = self.idp.create_authn_response(
-            {"givenName": "dosh"}, userid=user, sign_assertion=True, **response_args
+            {"givenName": "dosh"},
+            userid=user,
+            sign_assertion=True,
+            authn=authn,
+            name_id=name_id,
+            **response_args,
         )
 
         binding_out, destination = self.idp.pick_binding(

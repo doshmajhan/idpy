@@ -10,11 +10,11 @@ from app.sso import SSO
 
 
 def create_app(config_name="default") -> Flask:
-    app = Flask(__name__)
+    app: Flask = Flask(__name__)
     app.config.from_object(config[config_name])
-    api = Api(app)
+    api: Api = Api(app)
 
-    idp = Server(app.config["IDP_CONFIG"])
+    idp: Server = Server(config_file=app.config["IDP_CONFIG"])
 
     api.add_resource(Index, "/")
     api.add_resource(Login, "/login")

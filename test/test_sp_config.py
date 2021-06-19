@@ -29,8 +29,9 @@ CONFIG = {
     "description": "Mock SP",
     "service": {
         "sp": {
-            "want_response_signed": True,
+            "want_response_signed": False,
             "want_assertion_signed": True,
+            "allow_unsolicited": True,
             "authn_requests_signed": True,
             "logout_requests_signed": True,
             "endpoints": {
