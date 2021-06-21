@@ -1,3 +1,4 @@
+from base64 import b64encode
 from typing import Dict, List
 
 from flask import Flask
@@ -12,11 +13,13 @@ SP_ENTITY_ID = f"{BASE}/sp"
 
 
 def test_get_sp_metadata_by_entity_id(client: Flask):
-    pass
+    entity_id: str = b64encode(SP_ENTITY_ID.encode("ascii")).decode("utf-8")
+    response = client.get(f"{SP_METADATA_ENDPOINT}/{entity_id}")
+    assert response.status_code == 200
 
 
 def test_get_sp_metadata_with_entity_id_that_dne_produces_404(client: Flask):
-    entity_id: str = "doest-not-exist"
+    entity_id: str = b64encode("does-not-exist".encode("ascii")).decode("utf-8")
     response = client.get(f"{SP_METADATA_ENDPOINT}/{entity_id}")
     assert response.status_code == 404
 

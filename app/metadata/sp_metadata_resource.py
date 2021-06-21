@@ -1,3 +1,4 @@
+from base64 import b64decode
 from typing import Dict, List, Tuple, Union
 
 from flask_restful import Resource, fields, marshal_with, marshal_with_field, reqparse
@@ -28,13 +29,15 @@ class SpMetadata(Resource):
     def get(
         self, sp_entity_id: str
     ) -> Union[Tuple[str, int], Dict[str, EntityDescriptor]]:
+        # Handle decoding errors
+        decoded_entity_id: str = b64decode(sp_entity_id).decode("utf-8")
         md: InMemoryMetaData
         for md in self.metadata_store.metadata.values():
             entity_id: str
             entity_desc: dict
             for entity_id, entity_desc in md.items():
                 print(entity_id)
-                if entity_id == sp_entity_id and SP_DESCRIPTOR in entity_desc:
+                if entity_id == decoded_entity_id and SP_DESCRIPTOR in entity_desc:
                     return {"entity_id": entity_id, "metadata": md.entity_descr}
 
         return f"Unable to find Service Provider with Entity ID: {sp_entity_id}", 404
