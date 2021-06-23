@@ -80,7 +80,6 @@ CONFIG = {
         "url": "http://localhost",
     },
     "xmlsec_binary": xmlsec_path,
-    "metadata": {"local": [full_path("metadata/test-sp.xml")]},
     "logging": {
         "version": 1,
         "formatters": {

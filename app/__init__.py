@@ -1,5 +1,8 @@
 from flask import Flask
 from flask_restful import Api
+from saml2 import saml, samlp
+from saml2.config import IdPConfig
+from saml2.mdstore import MetadataStore
 from saml2.server import Server
 
 from app.config import config
@@ -16,7 +19,12 @@ def create_app(config_name="default") -> Flask:
     app.config.from_object(config[config_name])
     api: Api = Api(app)
 
-    idp: Server = Server(config_file=app.config["IDP_CONFIG"])
+    idp_config = IdPConfig()
+    idp_config.load_file(app.config["IDP_CONFIG"])
+    metadata_store: MetadataStore = MetadataStore([saml, samlp], None, idp_config)
+    idp_config.metadata = metadata_store
+
+    idp: Server = Server(config=idp_config)
 
     api.add_resource(Index, "/")
     api.add_resource(Login, "/login")
