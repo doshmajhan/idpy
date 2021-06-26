@@ -14,7 +14,7 @@ def username_password_authn():
     pass
 
 
-class SSO(Resource):
+class SsoResource(Resource):
     def __init__(self, idp: Server):
         self.idp = idp
 

@@ -6,10 +6,13 @@ from saml2.mdstore import MetadataStore
 from saml2.server import Server
 
 from app.config import config
+from app.database import db
 from app.index import Index
 from app.login import Login
 from app.metadata import IdpMetadata, SpMetadata, SpMetadataList
-from app.sso import SSO
+from app.schemas import ma
+from app.sso import SsoResource
+from app.users import UsersResource
 
 # TODO error handling for if config file doesn't exist
 
@@ -17,6 +20,8 @@ from app.sso import SSO
 def create_app(config_name="default") -> Flask:
     app: Flask = Flask(__name__)
     app.config.from_object(config[config_name])
+    db.init_app(app)
+    ma.init_app(app)
     api: Api = Api(app)
 
     idp_config = IdPConfig()
@@ -28,7 +33,7 @@ def create_app(config_name="default") -> Flask:
 
     api.add_resource(Index, "/")
     api.add_resource(Login, "/login")
-    api.add_resource(SSO, "/sso", resource_class_args=[idp])
+    api.add_resource(SsoResource, "/sso", resource_class_args=[idp])
     api.add_resource(IdpMetadata, "/metadata", resource_class_args=[idp])
     api.add_resource(
         SpMetadata,
@@ -40,5 +45,9 @@ def create_app(config_name="default") -> Flask:
         "/metadata/sp",
         resource_class_args=[idp],
     )
+    api.add_resource(UsersResource, "/users", "/users/<string:username>")
+
+    with app.app_context():
+        db.create_all()
 
     return app
