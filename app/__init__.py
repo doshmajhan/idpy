@@ -28,7 +28,7 @@ def create_app(config_name="default") -> Flask:
     # Initialize Marshmallow with Flask app
     ma.init_app(app)
 
-    # Create flask-restfuk API with Flask app
+    # Create flask-restful API with Flask app
     api: Api = Api(app)
 
     # Load our IDP config and create the core IDP server
@@ -61,7 +61,6 @@ def create_app(config_name="default") -> Flask:
     @app.after_request
     def add_header(response):
         response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
     return app

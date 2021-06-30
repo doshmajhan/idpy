@@ -1,7 +1,10 @@
 install:
 	poetry install
 
-run:
+build:
+	cd frontend && npm run build
+
+run: build
 	poetry run python run.py
 
 pytest:

@@ -12,6 +12,8 @@ __pycache__/
 **/pki/*.csr
 *.xml
 
+app/static/js/bundle.*
+
 tools/
 # Distribution / packaging
 .Python
