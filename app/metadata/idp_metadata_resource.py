@@ -14,7 +14,7 @@ METADATA_VALID_FOR: int = 365 * 24
 NAME_SPACE_PAIR: dict = {"xs": "http://www.w3.org/2001/XMLSchema"}
 
 
-class IdpMetadata(Resource):
+class IdpMetadataResource(Resource):
     def __init__(self, idp: Server):
         self.idp: Server = idp
 

@@ -1,5 +1,3 @@
-from marshmallow_sqlalchemy import field_for
-
 from app.models import User
 
 from ..schemas import BaseSchema
@@ -15,5 +13,3 @@ class UserSchema(BaseSchema):
     class Meta:
         model = User
         load_instance = True
-
-    id = field_for(User, "id", allow_none=True)

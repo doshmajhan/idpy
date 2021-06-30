@@ -1,6 +1,7 @@
 """
 Tests our sso functionality
 """
+from base64 import b64encode
 from typing import List
 from urllib.parse import quote
 
@@ -15,23 +16,28 @@ from saml2.request import AuthnRequest
 from saml2.response import AuthnResponse
 from saml2.s_utils import deflate_and_base64_encode
 
+from app.models import SpMetadata
+from app.schemas import SpMetadataSchema
+
 NAME_SPACE_PAIR: dict = {"xs": "http://www.w3.org/2001/XMLSchema"}
 BASE: str = "http://localhost:8080"
 SSO_ENDPOINT: str = "/sso"
 SP_METADATA_ENDPOINT: str = "/metadata/sp"
 RELAY_STATE: str = f"{BASE}/relay"  # TODO maybe put in config?
 DESTINATION: str = f"{BASE}{SSO_ENDPOINT}"  # TODO get this from config
+SP_ENTITY_ID: str = f"{BASE}/sp"
 
 
 @pytest.fixture(autouse=True)
 def upload_sp_metadata(client: Flask, saml_client: Saml2Client):
-    entity_id: str = "foo"
     eid: EntityDescriptor = entity_descriptor(saml_client.config)
     xml_doc: str = metadata_tostring_fix(eid, NAME_SPACE_PAIR)
-    response = client.put(
-        f"{SP_METADATA_ENDPOINT}/{entity_id}", data={"metadata": xml_doc}
-    )
+    xml_b64 = b64encode(xml_doc)
+    sp_metadata = SpMetadata(entity_id=SP_ENTITY_ID, metadata_xml_b64=xml_b64)
+    sp_metadata_json = SpMetadataSchema().dump(sp_metadata)
+    response = client.post(SP_METADATA_ENDPOINT, json=sp_metadata_json)
 
+    return response
     assert response.status_code == 201
 
 

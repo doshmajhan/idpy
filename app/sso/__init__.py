@@ -14,6 +14,9 @@ def username_password_authn():
     pass
 
 
+# Redirect to login endpoint
+
+
 class SsoResource(Resource):
     def __init__(self, idp: Server):
         self.idp = idp
