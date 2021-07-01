@@ -12,6 +12,8 @@ __pycache__/
 **/pki/*.csr
 *.xml
 
+.vscode
+
 app/static/js/bundle.*
 
 tools/

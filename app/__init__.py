@@ -7,6 +7,7 @@ from saml2.server import Server
 
 from app.config import config
 from app.database import db
+from app.idp_config_resource import IdpConfigResource
 from app.index import Index
 from app.login import Login
 from app.metadata import IdpMetadataResource, SpMetadataListResource, SpMetadataResource
@@ -42,6 +43,7 @@ def create_app(config_name="default") -> Flask:
     # Add all API resources
     api.add_resource(Index, "/")
     api.add_resource(Login, "/login")
+    api.add_resource(IdpConfigResource, "/config", resource_class_args=[idp])
     api.add_resource(SsoResource, "/sso", resource_class_args=[idp])
     api.add_resource(IdpMetadataResource, "/metadata", resource_class_args=[idp])
     api.add_resource(SpMetadataListResource, "/metadata/sp", resource_class_args=[idp])

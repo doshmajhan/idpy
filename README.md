@@ -8,6 +8,12 @@ Mock SAML Identity Provider in Python for testing SAML Service Provider implemen
 ### **Still under development*
 
 ## Setup
+
+### Requirements
+* pip
+* npm
+* xmlsec1
+
 ### Install dependencies
 ```bash
 pip install poetry
@@ -17,6 +23,12 @@ poetry install
 ```bash
 apt install xmlsec1
 yum install xmlsec1
+```
+
+### Install npm
+```bash
+apt install npm
+yum install npm
 ```
 
 ### Create certs
@@ -29,6 +41,11 @@ cd app/pki
 ```bash
 cd app/metadata
 poetry run python generate_metadata.py
+```
+
+## Build
+```bash
+make build
 ```
 
 ## Run
