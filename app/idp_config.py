@@ -80,7 +80,7 @@ CONFIG = {
         "url": "http://localhost",
     },
     "xmlsec_binary": xmlsec_path,
-    "metadata": {"local": [full_path("metadata/idp.xml")]},
+    "metadata": {"local": [full_path("resources/metadata/idp.xml")]},
     "logging": {
         "version": 1,
         "formatters": {

@@ -16,7 +16,7 @@ from saml2.validate import valid_instance
 
 METADATA_VALID_FOR = 365 * 24
 IDP_METADATA_FILE = "idp.xml"
-IDP_CONFIG_FILE_NAME = "../idp_config.py"  # TODO figure out how to import this
+IDP_CONFIG_FILE_NAME = "../../idp_config.py"  # TODO figure out how to import this
 NAME_SPACE_PAIR = {"xs": "http://www.w3.org/2001/XMLSchema"}
 CONFIG_FILE = os.path.join(Path(__file__).parent, IDP_CONFIG_FILE_NAME)
 

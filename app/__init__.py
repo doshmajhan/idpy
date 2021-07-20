@@ -7,13 +7,17 @@ from saml2.server import Server
 
 from app.config import config
 from app.database import db
-from app.idp_config_resource import IdpConfigResource
-from app.index import Index
-from app.login import Login
-from app.metadata import IdpMetadataResource, SpMetadataListResource, SpMetadataResource
+from app.resources.idp_config import IdpConfigResource
+from app.resources.index import Index
+from app.resources.login import Login
+from app.resources.metadata import (
+    IdpMetadataResource,
+    SpMetadataListResource,
+    SpMetadataResource,
+)
+from app.resources.sso import SsoResource
+from app.resources.users import UsersListResource, UsersResource
 from app.schemas import ma
-from app.sso import SsoResource
-from app.users import UsersListResource, UsersResource
 
 # TODO error handling for if config file doesn't exist
 
