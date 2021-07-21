@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
+  {% for user in users %}
+  <li><a href="/sso?SAMLRequest={{ saml_request }}&RelayState={{ relay_state }}&Signature={{ signature }}&SigAlg={{ sig_alg}}&username={{ user['username']}}">{{ user['username'] }}</a></li>
+  {% endfor %}
+</body>
+</html>

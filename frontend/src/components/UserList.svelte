@@ -1,5 +1,7 @@
 <script lang="ts">
   import UserRow from './UserRow.svelte'
+  import AddUserModal from './AddUserModal.svelte'
+
   export let users: string[];
 </script>
 

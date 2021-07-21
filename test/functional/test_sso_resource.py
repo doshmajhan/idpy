@@ -26,6 +26,7 @@ SP_METADATA_ENDPOINT: str = "/metadata/sp"
 RELAY_STATE: str = f"{BASE}/relay"  # TODO maybe put in config?
 DESTINATION: str = f"{BASE}{SSO_ENDPOINT}"  # TODO get this from config
 SP_ENTITY_ID: str = f"{BASE}/sp"
+USERNAME = "dosh@test.com"
 
 
 @pytest.fixture(autouse=True)
@@ -66,7 +67,7 @@ def test_sso_with_valid_parameters(
     client: Flask, saml_client: Saml2Client, authn_request: str
 ):
     response = client.get(
-        f"{SSO_ENDPOINT}?SAMLRequest={quote(authn_request)}&RelayState={quote(RELAY_STATE)}"
+        f"{SSO_ENDPOINT}?SAMLRequest={quote(authn_request)}&RelayState={quote(RELAY_STATE)}&username={USERNAME}"
     )
 
     assert response.status_code == 200
@@ -81,6 +82,15 @@ def test_sso_with_valid_parameters(
         saml_response_encoded, BINDING_HTTP_POST
     )
     assert authn_response is not None
+
+
+def test_sso_without_username_redirects_to_login(client: Flask, authn_request: str):
+    response = client.get(
+        f"{SSO_ENDPOINT}?SAMLRequest={quote(authn_request)}&RelayState={quote(RELAY_STATE)}"
+    )
+
+    assert response.status_code == 302
+    assert response.headers["Location"] == "http://localhost/login"
 
 
 def test_sso_returns_bad_request_with_no_saml_request(client: Flask):

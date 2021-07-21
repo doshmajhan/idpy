@@ -1,5 +1,7 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
+import werkzeug
+from flask import redirect, url_for
 from flask_restful import Resource, reqparse
 from flask_restful.reqparse import Namespace, RequestParser
 from saml2 import BINDING_HTTP_REDIRECT, NAMEID_FORMAT_EMAILADDRESS
@@ -14,26 +16,30 @@ def username_password_authn():
     pass
 
 
-# Redirect to login endpoint
-
-
 class SsoResource(Resource):
     def __init__(self, idp: Server):
         self.idp = idp
 
-    def get(self) -> Tuple[str, int, List]:
+    def get(self) -> Union[werkzeug.Response, Tuple[str, int, List]]:
         parser: RequestParser = reqparse.RequestParser()
         parser.add_argument("SAMLRequest", type=str, required=True)
         parser.add_argument("RelayState", type=str, required=True)
         parser.add_argument("SigAlg", type=str)
         parser.add_argument("Signature", type=str)
+        parser.add_argument("username", type=str)
+
         args: Namespace = parser.parse_args()
         authn_request: AuthnRequest = self.idp.parse_authn_request(
             args["SAMLRequest"], BINDING_HTTP_REDIRECT
         )
 
         response_args: dict = self.idp.response_args(authn_request.message)
-        user = "doshmajhan@gmail.com"
+
+        # Check if username is there, if not send to /login to select user to login as.
+        if not args["username"]:
+            return redirect(url_for("login"))
+
+        user = args["username"]
 
         # Document a wrapper for this
         AUTHN_BROKER = AuthnBroker()
